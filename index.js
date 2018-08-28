@@ -9,15 +9,16 @@ const moment = require("moment");
 const cli = require('cli').enable('catchall').enable('status');
 
 const config = cli.parse({
-  'smtp-port': ['s', 'SMTP port to listen on', 'number', 1025],
-  'smtp-ip': [false, 'IP Address to bind SMTP service to', 'ip', '0.0.0.0'],
-  'http-port': ['h', 'HTTP port to listen on', 'number', 1080],
-  'http-ip': [false, 'IP Address to bind HTTP service to', 'ip', '0.0.0.0'],
   whitelist: ['w', 'Only accept e-mails from these adresses. Accepts multiple e-mails comma-separated', 'string'],
   max: ['m', 'Max number of e-mails to keep', 'number', 100],
   auth: ['a', 'Enable Authentication', 'string'],
   headers: [false, 'Enable headers in responses']
 });
+
+config['smtp-port'] = process.env['SMTPPORT'] || 1025;
+config['smtp-host'] = process.env['SMTPHOST'] || '0.0.0.0';
+config['http-port'] = process.env['HTTPPORT'] || 1080;
+config['http-host'] = process.env['HTTPHOST'] || '0.0.0.0';
 
 const whitelist = config.whitelist ? config.whitelist.split(',') : [];
 
@@ -86,7 +87,7 @@ server.on('error', err => {
   cli.error(err);
 });
 
-server.listen(config['smtp-port'], config['smtp-ip']);
+server.listen(config['smtp-port'], config['smtp-host']);
 
 const app = express();
 
@@ -140,8 +141,8 @@ app.delete('/api/emails', (req, res) => {
     res.send();
 });
 
-app.listen(config['http-port'], config['http-ip'], () => {
-  cli.info("HTTP server listening on http://" + config['http-ip'] +  ":" + config['http-port']);
+app.listen(config['http-port'], config['http-host'], () => {
+  cli.info("HTTP server listening on http://" + config['http-host'] +  ":" + config['http-port']);
 });
 
-cli.info("SMTP server listening on " + config['smtp-ip'] + ":" + config['smtp-port']);
+cli.info("SMTP server listening on " + config['smtp-host'] + ":" + config['smtp-port']);
