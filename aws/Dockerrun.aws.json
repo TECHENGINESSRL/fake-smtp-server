@@ -1,0 +1,38 @@
+{
+  "AWSEBDockerrunVersion": 2,
+  "containerDefinitions": [
+    {
+      "mountPoints": [],
+      "name": "fake-smtp-server",
+      "links": [],
+      "healthCheck": null,
+      "image": "854428851504.dkr.ecr.eu-central-1.amazonaws.com/fake-smtp-server:latest",
+      "essential": true,
+      "environment": [
+        {
+          "name": "SMTPHOST",
+          "value": "0.0.0.0"
+        },
+        {
+          "name": "HTTPHOST",
+          "value": "0.0.0.0"
+        }
+      ],
+      "memory": 500,
+      "portMappings": [
+        {
+          "protocol": "tcp",
+          "containerPort": 25,
+          "hostPort": 25
+        },
+        {
+          "protocol": "tcp",
+          "containerPort": 2080,
+          "hostPort": 2080
+        }
+      ],
+      "cpu": 0
+    }
+  ],
+  "volumes": []
+}

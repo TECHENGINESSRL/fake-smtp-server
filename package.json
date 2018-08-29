@@ -2,10 +2,7 @@
   "name": "fake-smtp-server",
   "version": "0.7.7",
   "description": "Fake SMTP Server for email testing",
-  "homepage": "https://github.com/ReachFive/fake-smtp-server",
-  "bugs": {
-    "url": "https://github.com/ReachFive/fake-smtp-server/issues"
-  },
+  "homepage": "https://github.com/TECHENGINESSRL/fake-smtp-server",
   "keywords": [
     "smtp",
     "development",
@@ -21,7 +18,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/ReachFive/fake-smtp-server.git"
+    "url": "https://github.com/TECHENGINESSRL/fake-smtp-server.git"
   },
   "main": "index.js",
   "author": "ReachFive",
@@ -52,6 +49,11 @@
     "build"
   ],
   "scripts": {
+    "aws:docker:push": "docker push 854428851504.dkr.ecr.eu-central-1.amazonaws.com/fake-smtp-server:latest",
+    "aws:docker:tag": "docker tag fake-smtp-server:latest 854428851504.dkr.ecr.eu-central-1.amazonaws.com/fake-smtp-server:latest",
+    "aws:docker:build": "docker build -t fake-smtp-server --build-arg HTTPPORT=2080 --build-arg SMTPPORT=25 .",
+    "aws:docker": "npm run aws:docker:build && npm run aws:docker:tag && npm run aws:docker:push && echo 'Docker created and pushed on AWS repository'",
+    "aws:app:source": "DATE=$( date +%Y%m%d%H%M ); cd aws && zip -r aws.app.$DATE.zip Dockerrun.aws.json .ebextensions && unzip -l aws.app.$DATE.zip; cd ..",
     "start": "react-scripts start",
     "build": "PUBLIC_URL=./ react-scripts build",
     "test": "react-scripts test --env=jsdom",
